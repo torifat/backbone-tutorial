@@ -20,22 +20,30 @@ define([
     },
 
     initialize:function(){
-      _.bindAll(this, 'render');
+      _.bindAll(this, 'render', 'addOne', 'addAll');
 
+      Humans.bind('add', this.addOne);
+      Humans.bind('reset', this.addAll);
+
+      // Humans.fetch()
       // Temp Data
       Humans.add([
         {fname:"John",lname:"Doe",sex:"M",age:34},
         {fname:"Jane",lname:"Doe",sex:"F",age:27},
         {fname:"Jim",lname:"Doe",sex:"M",age:5}
       ]);
-
-      this.render();
     },
+
+    addOne: function(human) {
+      var html = this.template(human.toJSON());
+      this.$el.append(html);
+    },
+
+    addAll: function(){
+      Todos.each(this.addOne);
+    },
+
     render:function(){
-      _.each(Humans.models, function(member){
-        var html = this.template(member.toJSON());
-        this.$el.append(html);
-      }, this);
     }
   });
   return FamilyView;
